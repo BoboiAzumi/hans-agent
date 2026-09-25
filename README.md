@@ -52,6 +52,8 @@ Sistem akan membaca semua plugin yang ada di folder `plugins/` secara otomatis, 
 | **gradio** | membuka chat UI berbasis web menggunakan Gradio. Agent langsung bisa diakses lewat browser.|
 | **discord** | menjalankan bot Discord yang mendengarkan pesan di server. Selain sebagai interface, plugin ini juga menyediakan tool untuk mengirim pesan ke channel Discord dari agent. |
 | **library** | tool memori jangka panjang menggunakan Milvus. Agent bisa menyimpan, mencari, dan menghapus informasi. Pencarian dilakukan dengan hybrid search (dense vector + BM25) |
+| **weather** | tool untuk cek cuaca saat ini di sebuah kota |
+| **roleplay_api** | membangun rest API untuk kebutuhan chat roleplay seperti ryza (future project) |
 
 ---
 

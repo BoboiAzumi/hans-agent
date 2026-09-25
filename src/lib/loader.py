@@ -29,7 +29,11 @@ def plugin_load():
         module = importlib.util.module_from_spec(spec)
 
         sys.path.insert(0, str(plugin_dir))
-        spec.loader.exec_module(module)
+        try:
+            spec.loader.exec_module(module)
+        except Exception as e:
+            print(f"[warn] plugin '{module_name}' failed to load, skipped: {e}")
+            continue
 
         plugins[plugin_dir.name] = module.plugin
 

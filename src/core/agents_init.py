@@ -31,5 +31,8 @@ def sub_agent_bind_tools(
     for i in SUB_AGENT:
         _tools = []
         for j in i.get("tools"):
+            if j not in tools:
+                print(f"[warn] tool '{j}' not available for agent '{i.get('model')}', skipped")
+                continue
             _tools.append(tools[j])
         agents.set_tools(i.get("model"), _tools)

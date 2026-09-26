@@ -92,7 +92,7 @@ Penjelasan tiap field:
 | Field | Keterangan |
 |---|---|
 | `model` | Nama model yang digunakan |
-| `provider` | Provider LLM (saat ini baru mendukung `google-gen-ai`, `nvidia`, `openrouter`, `openai`) |
+| `provider` | Provider LLM (saat ini mendukung `google-gen-ai`, `nvidia`, `openrouter`, `openai`, `custom`) |
 | `key` | API key, ambil dari environment variable |
 | `base_url` | Base URL custom jika diperlukan, kosongkan jika tidak |
 | `system_prompt` | Kepribadian dan instruksi khusus untuk agent ini |
@@ -157,6 +157,21 @@ OPENAI_API_KEY="TOKEN"
 ```
 
 Tidak semua key harus diisi, sesuaikan dengan provider dan plugin yang kamu pakai.
+
+### Custom Provider
+
+Kalau kamu mau pakai provider lain tanpa mengubah kode, gunakan `"provider": "custom"` di config lalu atur semuanya lewat `.env`:
+
+```
+CUSTOM_API_TYPE="anthropic"   # "anthropic" atau "openai", default "openai"
+CUSTOM_MODEL="claude-sonnet-4-6"
+CUSTOM_API_KEY="TOKEN"
+CUSTOM_BASE_URL="https://api.anthropic.com"
+CUSTOM_MAX_TOKENS="8000"
+CUSTOM_TIMEOUT="6000"
+```
+
+`CUSTOM_API_TYPE="anthropic"` memakai format Messages API Anthropic, jadi endpoint apa pun yang Anthropic-compatible (misalnya proxy atau gateway) bisa dipakai cukup dengan mengubah `CUSTOM_BASE_URL`. Untuk endpoint OpenAI-compatible, pakai `CUSTOM_API_TYPE="openai"`. Field `model`, `key`, dan `base_url` di config akan menimpa nilai `.env` jika diisi.
 
 Install dependencies lalu jalankan:
 

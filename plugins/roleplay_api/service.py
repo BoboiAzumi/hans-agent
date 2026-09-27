@@ -1,17 +1,19 @@
-from plugins.roleplay_api.config import TTS, MAX_BATCH_TTS, REF_AUDIO, REF_TEXT
+from plugins.roleplay_api.config import TTS, MAX_BATCH_TTS, REF_AUDIO, REF_TEXT, SPEED_TTS
 if TTS:
     import time
     import uuid
     import torch
     import gc
     from qwen_tts import Qwen3TTSModel
+    from faster_qwen3_tts import FasterQwen3TTS
     from flask import send_file
     from pathlib import Path
     import soundfile as sf
 
 import threading
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
+from flask_cors import CORS
 
 class Graph:
     def __init__(self):
@@ -54,15 +56,26 @@ class Graph:
 
 graph = Graph()
 app = Flask(__name__)
-if TTS:
-    tts = Qwen3TTSModel.from_pretrained(
-        "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
-        device_map="cuda:0",
-        dtype=torch.bfloat16,
-    )
 
-    TEMP_DIR = Path("assets/temp_audio")
-    AUDIO_DIR = Path("assets/audio")
+CORS(app)
+
+if TTS:
+    if SPEED_TTS:
+        tts = FasterQwen3TTS.from_pretrained(
+            "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
+            dtype=torch.bfloat16,
+        )
+        tts.warmup()
+    else:
+        tts = Qwen3TTSModel.from_pretrained(
+            "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
+            device_map="cuda:0",
+            dtype=torch.bfloat16,
+        )
+
+    PROJECT_DIR = Path(__file__).resolve().parents[2]
+    TEMP_DIR = PROJECT_DIR / "assets" / "temp_audio"
+    AUDIO_DIR = PROJECT_DIR / "assets" / "audio"
     TEMP_DIR.mkdir(exist_ok=True)
     AUDIO_DIR.mkdir(exist_ok=True)
     RETENTION_SECONDS = 30 * 60
@@ -104,13 +117,21 @@ def inference():
                 texts = [parsed[i]["response_jp"] for i, _ in batch]
                 file_ids = [uuid.uuid4().hex for _ in batch]
 
-                batch_wavs, sample_rate = tts.generate_voice_clone(
-                    text=texts,
-                    language="Auto",
-                    ref_audio=f"{AUDIO_DIR}/{REF_AUDIO}",
-                    ref_text=REF_TEXT,
-                    x_vector_only_mode=False,
-                )
+                if SPEED_TTS:
+                    batch_wavs, sample_rate = tts.generate_voice_clone(
+                        text=texts,
+                        language="Japanese",
+                        ref_audio=f"{AUDIO_DIR}/{REF_AUDIO}",
+                        ref_text=REF_TEXT,
+                    )
+                else:
+                    batch_wavs, sample_rate = tts.generate_voice_clone(
+                        text=texts,
+                        language="Japanese",
+                        ref_audio=f"{AUDIO_DIR}/{REF_AUDIO}",
+                        ref_text=REF_TEXT,
+                        x_vector_only_mode=False
+                    )
 
                 gc.collect()
                 torch.cuda.empty_cache()
@@ -122,15 +143,15 @@ def inference():
         
         return jsonify(parsed)
     except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": e
-        })
+        print(e)
+        return make_response(jsonify({
+            "status": "error"
+        }), 500)
 
 if TTS:
-    @app.get("/audio/<file_id>.wav")
-    def get_audio(file_id):
-        path = TEMP_DIR / f"{file_id}.wav"
+    @app.get("/audio/<filename>")
+    def get_audio(filename):
+        path = TEMP_DIR / f"{filename}"
 
         print(path)
 

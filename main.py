@@ -9,7 +9,9 @@ load_dotenv()
 
 build_multi_agent()
 
+stop_event = threading.Event()
 try:
-    threading.Event().wait()
+    while not stop_event.wait(timeout=1.0):
+        pass
 except KeyboardInterrupt:
     print("\nShutting down...")

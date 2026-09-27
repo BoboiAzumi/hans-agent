@@ -1,0 +1,25 @@
+[2026-09-27 14:47:21] [INFO    ] discord.client: logging in using static token
+[2026-09-27 14:47:23] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 3f674674f8936a0b1f14280b7f26d4b3).
+'sox' is not recognized as an internal or external command,
+operable program or batch file.
+SoX could not be found!
+
+    If you do not have SoX, proceed here:
+     - - - http://sox.sourceforge.net/ - - -
+
+    If you do (or think that you should) have SoX, double-check your
+    path variables.
+    
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+ 
+Loading weights:   0%|          | 0/478 [00:00<?, ?it/s]Loading weights:  18%|#7        | 85/478 [00:00<00:00, 821.95it/s]Loading weights:  35%|###5      | 168/478 [00:00<00:00, 399.41it/s]Loading weights:  46%|####6     | 220/478 [00:00<00:00, 360.50it/s]Loading weights:  55%|#####4    | 262/478 [00:00<00:00, 332.16it/s]Loading weights:  63%|######2   | 299/478 [00:00<00:00, 328.50it/s]Loading weights:  70%|######9   | 334/478 [00:00<00:00, 321.49it/s]Loading weights:  77%|#######6  | 368/478 [00:01<00:00, 314.03it/s]Loading weights:  84%|########3 | 400/478 [00:01<00:00, 311.24it/s]Loading weights:  90%|######### | 432/478 [00:01<00:00, 309.99it/s]Loading weights:  97%|#########7| 464/478 [00:01<00:00, 301.62it/s]Loading weights: 100%|##########| 478/478 [00:02<00:00, 213.50it/s]
+Fetching 4 files:   0%|          | 0/4 [00:00<?, ?it/s]Fetching 4 files: 100%|##########| 4/4 [00:00<00:00, 611.10it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/496 [00:00<?, ?it/s]Loading weights:   6%|6         | 31/496 [00:00<00:01, 306.20it/s]Loading weights:  27%|##6       | 132/496 [00:00<00:00, 712.27it/s]Loading weights:  41%|####1     | 204/496 [00:00<00:00, 523.02it/s]Loading weights:  53%|#####2    | 261/496 [00:00<00:00, 474.36it/s]Loading weights:  63%|######2   | 312/496 [00:00<00:00, 411.38it/s]Loading weights:  73%|#######3  | 364/496 [00:00<00:00, 439.26it/s]Loading weights:  87%|########7 | 432/496 [00:00<00:00, 500.82it/s]Loading weights: 100%|##########| 496/496 [00:00<00:00, 513.20it/s]
+Could not infer sample rate from base model; defaulting to 24000 Hz.
+I0927 07:48:48.162176   23580 chttp2_transport.cc:1400] ipv4:127.0.0.1:54212: Got goaway [11] err=UNAVAILABLE:GOAWAY received; Error code: 11; Debug Text: too_many_pings {http2_error:11}
+E0927 07:48:48.162400   23580 chttp2_transport.cc:1432] ipv4:127.0.0.1:54212: Received a GOAWAY with error code ENHANCE_YOUR_CALM and debug data equal to "too_many_pings". Current keepalive time (before throttling): 10000ms

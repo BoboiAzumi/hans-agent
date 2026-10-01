@@ -2,7 +2,7 @@ FROM python:3.12.14-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY requirements-cpu.txt .
 
 RUN pip install -r requirements-cpu.txt --no-cache-dir
 

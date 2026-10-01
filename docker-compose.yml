@@ -10,3 +10,5 @@ services:
       - "3000:3000"
       - "7860:7860"
     restart: always
+    environment:
+      - PYTHONUNBUFFERED=1

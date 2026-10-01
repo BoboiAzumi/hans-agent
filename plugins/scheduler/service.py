@@ -58,7 +58,7 @@ def tool_call(action, prompt, hour, minute, ids):
 
         jika action adalah remove, maka hour dan minute isi 0 saja
     """
-    print(f"{action} {hour} {minute} {ids}")
+    print(f"{action} {hour} {minute} {ids}\nPrompt: {prompt}")
     try:
         if action == "remove":
             scheduler.remove(ids)

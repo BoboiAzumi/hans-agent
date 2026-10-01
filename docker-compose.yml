@@ -2,7 +2,7 @@ services:
   hans:
     build: 
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     container_name: hans
     volumes:
       - ./storage:/app/

@@ -7,6 +7,6 @@ services:
     volumes:
       - ./storage:/app/
     ports:
-      -"3000:3000"
-      -"7860:7860"
+      - "3000:3000"
+      - "7860:7860"
     restart: always

@@ -25,3 +25,4 @@ torch==2.14.0
 torchaudio
 torchvision
 discord.py
+python-telegram-bot

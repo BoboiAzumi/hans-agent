@@ -56,4 +56,13 @@ SUB_AGENT = [
         "description": "Crypto Agent Analysis yang bekerja setiap pukul 08:00 setiap hari",
         "tools": ["crypto", "news"]
     },
+    {
+        "model": "gemini-3.5-flash-lite",
+        "provider": "google-gen-ai",
+        "key": os.getenv("GOOGLE_API_KEY"),
+        "base_url": "",
+        "system_prompt": CRYPTO_AGENT_PROMPT,
+        "description": "Crypto Agent Analysis yang bekerja khusus untuk tanya jawab",
+        "tools": ["crypto", "news"]
+    },
 ]

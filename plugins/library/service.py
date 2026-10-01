@@ -37,7 +37,7 @@ if not client.has_collection("hans"):
 
     index_params.add_index(
         field_name="dense",
-        index_type="AUTOINDEX",
+        index_type="IVF_SQ8",
         metric_type="COSINE"
     )
 

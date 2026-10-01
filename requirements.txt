@@ -1,15 +1,19 @@
+apscheduler==3.11.3
 faster_qwen3_tts==0.5.2
 Flask==3.1.3
 flask_cors==6.0.5
-langchain_anthropic==1.7.4
-langchain_core==1.6.5
+joblib==1.6.0
+langchain_anthropic==1.7.4  # PILIH: 1.7.4 atau 1.7.5
+langchain_core==1.6.5       # PILIH: 1.6.5 atau 1.6.6
 langchain_google_genai==4.4.0
 langchain_nvidia_ai_endpoints==1.4.3
-langchain_openai==1.6.6
+langchain_openai==1.6.6     # PILIH: 1.6.6 atau 1.6.7
 langchain_openrouter==0.2.9
+langchain_tavily==0.2.18
 langgraph==1.2.12
 langgraph-checkpoint-sqlite
 milvus_lite
+pandas==3.0.6
 pydantic==2.13.5
 pymilvus==3.0.2
 python-dotenv==1.2.3

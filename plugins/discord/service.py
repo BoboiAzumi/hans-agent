@@ -70,7 +70,7 @@ class DiscordBot(discord.Client):
 
             except Exception as e:
                 print(f"Error: {e}")
-                return await message.reply("Unexpected Error")
+                return await message.reply(str(e))
 
         if message.channel:
             async with message.channel.typing():
@@ -92,6 +92,8 @@ def run():
 @tool
 def tool_call(channel_id: str, message: str):
     '''
+        DILARANG: mengirim pesan ke discord jika pesan sebelumnya memiliki prefix DISCORD, kecuali user secara eksplisit meminta untuk mengirim ke channel discord tertentu
+        
         Kirim pesan ke discord, entah itu notifikasi, pengingat ataupun cross access (user tidak mengirimkan pesan dari discord namun ingin kirim ke discord)
         arguments:
             channel_id: id channel, bisa didapatkan dari riwayat jangka panjang
@@ -99,7 +101,7 @@ def tool_call(channel_id: str, message: str):
 
         Penting, cari terlebih dahulu channel id dari tool manapun yang mendukung akses ke memori jangka panjang,
         lakukan konfirmasi terlebih dahulu sebelum mengirimkan ke tool ini jika channel_id ditemukan,
-        jika channel id tidak ada, maka jangan lakukan
+        jika channel id tidak ada, maka jangan lakukan.
     '''
     async def send():
         channel = bot.get_channel(channel_id)

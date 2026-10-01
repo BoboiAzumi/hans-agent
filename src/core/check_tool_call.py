@@ -9,6 +9,8 @@ def check_tool_call(state: SupervisorState):
 
     tool_names = [tc["name"] for tc in last.tool_calls]
 
+    print(f"call {tool_names}")
+
     if "SupervisorDecision" in tool_names:
         return "route_decision"
     return "tools"

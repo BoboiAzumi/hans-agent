@@ -1,9 +1,11 @@
-from plugins.roleplay_api.config import TTS, MAX_BATCH_TTS, REF_AUDIO, REF_TEXT, SPEED_TTS
+from plugins.roleplay_api.config import TTS, MAX_BATCH_TTS, REF_AUDIO, REF_TEXT, SPEED_TTS, X_VECTOR_ONLY_MODE
 if TTS:
+    import io
     import time
     import uuid
     import torch
     import gc
+    import base64
     from qwen_tts import Qwen3TTSModel
     from faster_qwen3_tts import FasterQwen3TTS
     from flask import send_file
@@ -65,7 +67,6 @@ if TTS:
             "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
             dtype=torch.bfloat16,
         )
-        tts.warmup()
     else:
         tts = Qwen3TTSModel.from_pretrained(
             "Qwen/Qwen3-TTS-12Hz-0.6B-Base",
@@ -74,28 +75,28 @@ if TTS:
         )
 
     PROJECT_DIR = Path(__file__).resolve().parents[2]
-    TEMP_DIR = PROJECT_DIR / "assets" / "temp_audio"
+#    TEMP_DIR = PROJECT_DIR / "assets" / "temp_audio"
     AUDIO_DIR = PROJECT_DIR / "assets" / "audio"
-    TEMP_DIR.mkdir(exist_ok=True)
+#    TEMP_DIR.mkdir(exist_ok=True)
     AUDIO_DIR.mkdir(exist_ok=True)
     RETENTION_SECONDS = 30 * 60
 
-    def cleanup_worker():
-        while True:
-            now = time.time()
-            for file in TEMP_DIR.iterdir():
-                if not file.is_file():
-                    continue
-                try:
-                    age = now - file.stat().st_mtime
-                    if age > RETENTION_SECONDS:
-                        file.unlink()
-                        print(f"Deleted: {file}")
-
-                except Exception as e:
-                    print(f"Cleanup error: {file}: {e}")
-
-            time.sleep(60)
+#    def cleanup_worker():
+#        while True:
+#            now = time.time()
+#            for file in TEMP_DIR.iterdir():
+#                if not file.is_file():
+#                    continue
+#                try:
+#                    age = now - file.stat().st_mtime
+#                    if age > RETENTION_SECONDS:
+#                        file.unlink()
+#                        print(f"Deleted: {file}")
+#
+#                except Exception as e:
+#                    print(f"Cleanup error: {file}: {e}")
+#
+#            time.sleep(60)
 
 @app.route("/", methods=["POST"])
 def inference():
@@ -130,16 +131,26 @@ def inference():
                         language="Japanese",
                         ref_audio=f"{AUDIO_DIR}/{REF_AUDIO}",
                         ref_text=REF_TEXT,
-                        x_vector_only_mode=False
+                        x_vector_only_mode=X_VECTOR_ONLY_MODE
                     )
 
                 gc.collect()
                 torch.cuda.empty_cache()
 
                 for (i, _), file_id, wav in zip(batch, file_ids, batch_wavs):
-                    output_path = TEMP_DIR / f"{file_id}_output.wav"
-                    sf.write(output_path, wav, sample_rate)
-                    parsed[i]["audio"] = f"/audio/{file_id}_output.wav"
+                    # output_path = TEMP_DIR / f"{file_id}_output.wav"
+                    # sf.write(output_path, wav, sample_rate)
+                    # parsed[i]["audio"] = f"/audio/{file_id}_output.wav"
+
+                    buffer = io.BytesIO()
+                    try:
+                        sf.write(buffer, wav, sample_rate, format="OGG", subtype="OPUS")
+                    except:
+                        buffer.seek(0)
+                        buffer.truncate()
+                        sf.write(buffer, wav, sample_rate, format="OGG", subtype="VORBIS")
+                    b64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+                    parsed[i]["audio"] = f"data:audio/ogg;base64,{b64}"
         
         return jsonify(parsed)
     except Exception as e:
@@ -148,22 +159,22 @@ def inference():
             "status": "error"
         }), 500)
 
-if TTS:
-    @app.get("/audio/<filename>")
-    def get_audio(filename):
-        path = TEMP_DIR / f"{filename}"
-
-        print(path)
-
-        if not path.exists():
-            return jsonify({
-                "error": "audio not found or expired"
-            }), 404
-
-        return send_file(
-            path,
-            mimetype="audio/wav",
-        )
+# if TTS:
+#     @app.get("/audio/<filename>")
+#     def get_audio(filename):
+#         path = TEMP_DIR / f"{filename}"
+# 
+#         print(path)
+# 
+#         if not path.exists():
+#             return jsonify({
+#                 "error": "audio not found or expired"
+#             }), 404
+# 
+#         return send_file(
+#             path,
+#             mimetype="audio/wav",
+#         )
 
 def run():
     app.run(
@@ -176,8 +187,8 @@ threading.Thread(
     daemon=True,
 ).start()
 
-if TTS:
-    threading.Thread(
-        target=cleanup_worker,
-        daemon=True
-    ).start()
+# if TTS:
+#     threading.Thread(
+#         target=cleanup_worker,
+#         daemon=True
+#     ).start()

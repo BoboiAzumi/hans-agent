@@ -37,7 +37,7 @@ def model_init(
                 model=model,
                 api_key=key,
                 streaming=False,
-                thinking_level="minimal"
+                thinking_level="high"
             )
         case "nvidia":
             llm = ChatNVIDIA(

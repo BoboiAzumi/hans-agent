@@ -2,6 +2,15 @@ from langchain_core.messages import HumanMessage, RemoveMessage
 from src.utils.state import SupervisorState
 from src.lib.agents import Agents
 
+def get_text(msg) -> str:
+    c = msg.content
+    if isinstance(c, str):
+        return c
+    return "".join(
+        b.get("text", "") for b in c
+        if isinstance(b, dict) and b.get("type") == "text"
+    )
+
 def call_other_agent(agent: Agents):
     def call_other_agent_bind(state: SupervisorState):
         print(f"Call Agent : {state['target_agent']}")
@@ -25,7 +34,7 @@ def call_other_agent(agent: Agents):
                         break
 
         sub_result = subagent_app.invoke({"messages": [task_msg]})
-        final_answer = sub_result["messages"][-1]
+        final_answer = get_text(sub_result["messages"][-1])
     
         already_asked = state.get("consulted_agent", [])
         hop_count = state.get("hop_count", 0)

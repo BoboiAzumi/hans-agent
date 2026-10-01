@@ -105,13 +105,19 @@ def tool_call(channel_id: str, message: str):
         lakukan konfirmasi terlebih dahulu sebelum mengirimkan ke tool ini jika channel_id ditemukan,
         jika channel id tidak ada, maka jangan lakukan.
     '''
+    async def send_long_channel(channel, content, limit=2000):
+        if not content:
+            return
+        for i in range(0, len(content), limit):
+            await channel.send(content[i:i+limit])
+            
     async def send():
         channel = bot.get_channel(channel_id)
         print(f"[DEBUG] channel_id diterima: {channel_id}")
         try:
             if channel is None:
                 channel = await bot.fetch_channel(channel_id)
-            await channel.send(message)
+            await send_long_channel(channel, message)
             return "Pesan sudah terkirim"
         except discord.NotFound:
             return "Channel tidak ditemukan (ID salah atau channel sudah dihapus)"

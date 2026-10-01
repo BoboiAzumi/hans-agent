@@ -32,9 +32,11 @@ def call_other_agent(agent: Agents):
                     if getattr(m, "type", "") == "human":
                         task_msg = m
                         break
-
-        sub_result = subagent_app.invoke({"messages": [task_msg]})
-        final_answer = get_text(sub_result["messages"][-1])
+        try:
+            sub_result = subagent_app.invoke({"messages": [task_msg]})
+            final_answer = get_text(sub_result["messages"][-1])
+        except Exception as e:
+            final_answer = f"Sub Agent Error {str(e)}"
     
         already_asked = state.get("consulted_agent", [])
         hop_count = state.get("hop_count", 0)

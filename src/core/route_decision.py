@@ -20,6 +20,7 @@ def route_decision(state: SupervisorState):
     if args["mode"] == "answer" and args.get("answer_text"):
         updates["messages"] = [AIMessage(content=args["answer_text"])]
     else:
+        print(f'{updates["mode"]} to {updates["target_agent"]}')
         updates["messages"] = [tool_response]
 
     return updates

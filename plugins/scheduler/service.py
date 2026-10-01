@@ -11,11 +11,6 @@ class Scheduler():
         return self
 
     def run_job(self, prompt):
-        config = {
-            "configurable": {
-                "thread_id": "scheduler"
-            }
-        }
         try:
             self.graph.invoke({
                 "messages": [
@@ -24,7 +19,7 @@ class Scheduler():
                         "content": prompt
                     }
                 ]
-            }, config)
+            })
         except Exception as e:
             print(f"Error scheduler: {str(e)}")
 

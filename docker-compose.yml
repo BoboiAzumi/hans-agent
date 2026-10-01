@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: hans
     volumes:
-      - ./storage:/app/
+      - ./storage:/app/storage
     ports:
       - "3000:3000"
       - "7860:7860"

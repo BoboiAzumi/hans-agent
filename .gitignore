@@ -1,4 +1,5 @@
 .env
 checkpoints.*
-storage.db
+./storage/checkpoints.db
+/storage/milvus.db
 **/**/__pycache__

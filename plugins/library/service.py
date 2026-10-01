@@ -11,7 +11,7 @@ embedding = GoogleGenerativeAIEmbeddings(
     output_dimensionality=EMBEDDING_DIM
 )
 
-client = MilvusClient("./storage.db")
+client = MilvusClient("./storage/milvus.db")
 
 if not client.has_collection("hans"):
     schema = MilvusClient.create_schema(

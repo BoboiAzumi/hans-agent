@@ -21,7 +21,7 @@ def build_multi_agent():
     graph = create_graph(supervisor, sub_agent, tools)
 
     conn = sqlite3.connect(
-        "checkpoints.db",
+        "./storage/checkpoints.db",
         check_same_thread=False
     )
     

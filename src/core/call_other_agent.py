@@ -13,7 +13,7 @@ def get_text(msg) -> str:
 
 def call_other_agent(agent: Agents):
     def call_other_agent_bind(state: SupervisorState):
-        print(f"Call Agent : {state['target_agent']}")
+        print(f"Call Agent : {state['target_agent']} {state['mode']}")
         agent_info = agent.get().get(state["target_agent"])
         subagent_app = agent_info["graph"]
 

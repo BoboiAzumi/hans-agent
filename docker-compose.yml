@@ -12,3 +12,4 @@ services:
     restart: always
     environment:
       - PYTHONUNBUFFERED=1
+      - TZ=Asia/Jakarta

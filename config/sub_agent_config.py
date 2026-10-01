@@ -1,4 +1,5 @@
 import os
+from config.crypto_agent_config import CRYPTO_AGENT_PROMPT
 
 SUB_AGENT = [
     {
@@ -27,5 +28,32 @@ SUB_AGENT = [
         "system_prompt": "Kamu adalah agent yang punya karakter dingin, hemat bicara, dan efisien",
         "description": "Agent yang punya karakteristik dingin",
         "tools": ["library"]
+    },
+    {
+        "model": "gemini-3.6-flash",
+        "provider": "google-gen-ai",
+        "key": os.getenv("GOOGLE_API_KEY"),
+        "base_url": "",
+        "system_prompt": CRYPTO_AGENT_PROMPT,
+        "description": "Crypto Agent Analysis yang bekerja pada pukul 00:00 - 11:00, periode 4 jam sekali",
+        "tools": ["crypto", "news"]
+    },
+    {
+        "model": "gemini-3.7-flash",
+        "provider": "google-gen-ai",
+        "key": os.getenv("GOOGLE_API_KEY"),
+        "base_url": "",
+        "system_prompt": CRYPTO_AGENT_PROMPT,
+        "description": "Crypto Agent Analysis yang bekerja pada pukul 12:00 - 23:00, periode 4 jam sekali",
+        "tools": ["crypto", "news"]
+    },
+    {
+        "model": "gemini-3.8-flash",
+        "provider": "google-gen-ai",
+        "key": os.getenv("GOOGLE_API_KEY"),
+        "base_url": "",
+        "system_prompt": CRYPTO_AGENT_PROMPT,
+        "description": "Crypto Agent Analysis yang bekerja setiap pukul 08:00 setiap hari",
+        "tools": ["crypto", "news"]
     },
 ]

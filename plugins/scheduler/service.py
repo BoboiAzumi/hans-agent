@@ -16,14 +16,17 @@ class Scheduler():
                 "thread_id": "scheduler"
             }
         }
-        self.graph.invoke({
-            "messages": [
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        }, config)
+        try:
+            self.graph.invoke({
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
+            }, config)
+        except Exception as e:
+            print(f"Error scheduler: {str(e)}")
 
     def tool_call(self, prompt, hour, minute, id):
         self.scheduler.add_job(

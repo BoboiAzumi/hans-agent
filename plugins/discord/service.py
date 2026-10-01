@@ -39,6 +39,8 @@ class DiscordBot(discord.Client):
                 result = await message.reply(chunk)
             return result
 
+        
+
         async def send():
             try:
                 response = await asyncio.to_thread(

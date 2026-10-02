@@ -10,14 +10,15 @@ class Scheduler():
         self.graph = graph
         return self
 
-    def run_job(self, prompt):
+    def run_job(self, prompt, job_id):
         try:
+            thread_id = f"scheduler-{job_id}"
             config = {
                 "configurable": {
-                    "thread_id": "scheduler"
+                    "thread_id": thread_id
                 }
             }
-            self.graph.invoke({
+            response = self.graph.invoke({
                 "messages": [
                     {
                         "role": "user",
@@ -25,21 +26,38 @@ class Scheduler():
                     }
                 ]
             }, config)
+
+            messages = response.get("messages", [])
+            # if messages:
+            #     last = messages[-1]
+            #     content = last.content if hasattr(last, "content") else str(last)
+            #     if isinstance(content, list):
+            #         print("".join(
+            #             block.get("text", "") if isinstance(block, dict) else str(block)
+            #             for block in content
+            #         ))
+            #     print(f"Scheduler Print : {messages}")
+
+            self.graph.delete_thread(thread_id)
         except Exception as e:
             print(f"Error scheduler: {str(e)}")
 
-    def tool_call(self, prompt, hour, minute, id):
+    def tool_call(self, prompt, hour, minute, ids):
         self.scheduler.add_job(
             self.run_job,
             "cron",
             hour=hour,
             minute=minute,
-            args=[prompt],
-            id=id
+            args=[prompt, ids],
+            id=ids
         )
 
     def remove(self, ids):
         self.scheduler.remove_job(ids)
+
+    def shutdown(self):
+        if self.scheduler.running:
+            self.scheduler.shutdown(wait=True)
 
 scheduler = Scheduler()
 

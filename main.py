@@ -7,10 +7,10 @@ warnings.filterwarnings('ignore')
 
 load_dotenv()
 
-build_multi_agent()
-
-stop_event = threading.Event()
 try:
+    build_multi_agent()
+
+    stop_event = threading.Event()
     while not stop_event.wait(timeout=1.0):
         pass
 except KeyboardInterrupt:

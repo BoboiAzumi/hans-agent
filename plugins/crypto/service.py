@@ -119,13 +119,14 @@ def tool_call(interval):
         result = torch.cat([close, suggest], dim=1)
         result = scaler_y.inverse_transform([result.squeeze().detach().numpy()])[-1]
         result = {
-            "current_close": float(df["close"].iloc[-1]),
             "pred_close": float(result[0]),
+            "pred_percentage": f'{((float(result[0]) - float(df["close"].iloc[-1])) / float(df["close"].iloc[-1])) * 100}%',
             "pred_buy": float(softmax[0].astype(float)),
             "pred_hold": float(softmax[1].astype(float)),
             "pred_sell": float(softmax[2].astype(float)),
-            "candles": df.to_dict("records"),
-            "greed_fear_index": greed_fear_index.to_dict("records")
+            "current_price": float(df["close"].iloc[-1]),
+            "candles_history": df.to_dict("records"),
+            "greed_fear_history": greed_fear_index.to_dict("records")[::-1]
         }
 
     return result

@@ -1,4 +1,5 @@
 from src.core.agents_init import supervisor_init, sub_agent_init, sub_agent_bind_tools
+from src.core.graph_wrapper import GraphWrapper
 from src.core.graph import create_graph
 from src.lib.loader import plugin_load
 from langgraph.checkpoint.sqlite import SqliteSaver
@@ -27,6 +28,8 @@ def build_multi_agent():
     
     checkpointer = SqliteSaver(conn)
     app = graph.compile(checkpointer=checkpointer)
+
+    app = GraphWrapper(app, checkpointer)
 
     for i in plugins:
         if not "interface" in plugins[i]:

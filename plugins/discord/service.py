@@ -103,7 +103,7 @@ def tool_call(channel_id: str, message: str):
 
         Penting, cari terlebih dahulu channel id dari tool manapun yang mendukung akses ke memori jangka panjang,
         lakukan konfirmasi terlebih dahulu sebelum mengirimkan ke tool ini jika channel_id ditemukan,
-        jika channel id tidak ada, maka jangan lakukan.
+        jika channel id tidak ada, maka jangan lakukan,
     '''
     async def send_long_channel(channel, content, limit=2000):
         if not content:
